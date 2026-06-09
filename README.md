@@ -82,3 +82,9 @@ This prepares the project for future Azure Container Registry and AKS deployment
 ## CI/CD Notes
 
 GitHub Actions is transitioning JavaScript actions from Node.js 20 to Node.js 24. This repository proactively opts into Node.js 24 with `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` so future action runtime deprecations are less likely to break the workflow unexpectedly.
+
+## GitHub Container Registry
+
+GitHub Actions builds the Docker image and publishes it to GitHub Container Registry on pushes to `main`. GHCR stores the versioned image so later deployment phases can pull a known build instead of relying on a local-only Docker image.
+
+The `latest` tag is the moving tag for the most recent `main` build. The `${{ github.sha }}` tag is the immutable build-specific tag for the exact commit that produced the image. Kubernetes can later pull this GHCR image instead of using `steve-devops-api:local`.
