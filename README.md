@@ -54,3 +54,21 @@ The app runs inside a container. Port 8000 on the Mac maps to port 8000 inside t
 ```text
 http://localhost:8000/docs
 ```
+
+## Run in Local Kubernetes
+
+```bash
+docker build -t steve-devops-api:local .
+kubectl apply -f k8s/local/deployment.yaml
+kubectl apply -f k8s/local/service.yaml
+kubectl get pods
+kubectl get services
+```
+
+Test the Kubernetes service:
+
+```bash
+http http://localhost:30080/health
+```
+
+`imagePullPolicy: Never` tells Kubernetes to use the local Docker image instead of pulling from a remote registry. NodePort `30080` exposes the app locally through Kubernetes. The `/health` endpoint is used for both liveness and readiness checks.

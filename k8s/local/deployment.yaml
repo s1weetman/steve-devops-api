@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: steve-devops-api
+  labels:
+    app: steve-devops-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: steve-devops-api
+  template:
+    metadata:
+      labels:
+        app: steve-devops-api
+    spec:
+      containers:
+        - name: steve-devops-api
+          image: steve-devops-api:local
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
