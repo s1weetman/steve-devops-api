@@ -78,3 +78,7 @@ http http://localhost:30080/health
 The GitHub Actions CI workflow runs on pushes to `main` and pull requests targeting `main`. It installs the Python dependencies from `requirements.txt`, runs the pytest test suite, and builds the Docker image with the existing Dockerfile.
 
 This prepares the project for future Azure Container Registry and AKS deployment work without adding cloud deployment steps yet.
+
+## CI/CD Notes
+
+GitHub Actions is transitioning JavaScript actions from Node.js 20 to Node.js 24. This repository proactively opts into Node.js 24 with `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` so future action runtime deprecations are less likely to break the workflow unexpectedly.
