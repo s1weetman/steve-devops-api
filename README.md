@@ -31,3 +31,26 @@ http http://localhost:8000/ops/disk
 http http://localhost:8000/ops/files
 http http://localhost:8000/ops/python-version
 ```
+
+## Run with Docker
+
+```bash
+docker build -t steve-devops-api:local .
+docker run --rm -p 8000:8000 steve-devops-api:local
+```
+
+Test the containerized API:
+
+```bash
+http http://localhost:8000/
+http http://localhost:8000/health
+http http://localhost:8000/ops/python-version
+```
+
+Docker validation note:
+
+The app runs inside a container. Port 8000 on the Mac maps to port 8000 inside the container, so the API remains available locally at:
+
+```text
+http://localhost:8000/docs
+```
