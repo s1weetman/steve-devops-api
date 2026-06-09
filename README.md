@@ -88,3 +88,19 @@ GitHub Actions is transitioning JavaScript actions from Node.js 20 to Node.js 24
 GitHub Actions builds the Docker image and publishes it to GitHub Container Registry on pushes to `main`. GHCR stores the versioned image so later deployment phases can pull a known build instead of relying on a local-only Docker image.
 
 The `latest` tag is the moving tag for the most recent `main` build. The `${{ github.sha }}` tag is the immutable build-specific tag for the exact commit that produced the image. Kubernetes can later pull this GHCR image instead of using `steve-devops-api:local`.
+
+The GHCR image is built as a multi-platform image for `linux/amd64` and `linux/arm64`. This supports both Intel/AMD Linux Kubernetes nodes and Apple Silicon ARM64 local Kubernetes clusters. The platform support matters because each Kubernetes node must be able to pull an image that matches its CPU architecture.
+
+## Kubernetes Image Sources
+
+Local image deployment uses `k8s/local` and the `steve-devops-api:local` image built on the same machine. Its deployment sets `imagePullPolicy: Never`, which tells Kubernetes to use the image already available to the local cluster.
+
+Registry-based deployment uses `k8s/ghcr` and pulls `ghcr.io/s1weetman/steve-devops-api:latest` from GitHub Container Registry. Its deployment sets `imagePullPolicy: Always`, which tells Kubernetes to check the registry for the requested image when starting pods.
+
+Registry-based deployment is the standard pattern in enterprise environments because build systems publish versioned images to a central registry, and Kubernetes clusters pull approved images from that registry. This separates build from runtime, gives teams traceable image versions, and prepares the project for later cloud deployment.
+
+Run the GHCR-based Kubernetes deployment:
+
+```bash
+./scripts/k8s-ghcr-deploy.sh
+```
